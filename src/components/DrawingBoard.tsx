@@ -12,7 +12,7 @@ interface LineProps {
   points: number[];
   stroke: string;
   strokeWidth: number;
-  opacity: number;
+  opacity?: number;
   tool: string;
   dash?: number[];
 }
@@ -55,7 +55,7 @@ const DrawingBoard = () => {
         points: [point.x, point.y],
         stroke: getActiveTool() === "eraser" ? "#fff" : "#E8EEF0",
         strokeWidth: getActiveTool() === "eraser" ? 32 : 8,
-        opacity: 0.95,
+        opacity: getActiveTool() === "eraser" ? 1 : 0.95,
         tool: getActiveTool(),
       },
     ]);
@@ -63,6 +63,7 @@ const DrawingBoard = () => {
 
   const handleMouseMove = (e: any) => {
     if (!isDrawing.current) return;
+
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
     const lastLine = lines[lines.length - 1];
@@ -103,7 +104,7 @@ const DrawingBoard = () => {
               points={line.points}
               stroke={line.stroke}
               strokeWidth={line.strokeWidth}
-              opacity={line.opacity}
+              opacity={line?.opacity ?? 1}
               tension={0.5}
               lineCap="round"
               lineJoin="round"
