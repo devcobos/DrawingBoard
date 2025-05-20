@@ -12,8 +12,6 @@ interface LineProps {
   points: number[];
   stroke: string;
   strokeWidth: number;
-  shadowBlur: number;
-  shadowColor: string;
   opacity: number;
   tool: string;
   dash?: number[];
@@ -57,10 +55,8 @@ const DrawingBoard = () => {
         points: [point.x, point.y],
         stroke: getActiveTool() === "eraser" ? "#fff" : "#E8EEF0",
         strokeWidth: getActiveTool() === "eraser" ? 32 : 8,
-        opacity: 1,
+        opacity: 0.95,
         tool: getActiveTool(),
-        shadowColor: "#fff",
-        shadowBlur: 4,
       },
     ]);
   };
@@ -107,8 +103,8 @@ const DrawingBoard = () => {
               points={line.points}
               stroke={line.stroke}
               strokeWidth={line.strokeWidth}
+              opacity={line.opacity}
               tension={0.5}
-              dash={[10, 5]}
               lineCap="round"
               lineJoin="round"
               globalCompositeOperation={
