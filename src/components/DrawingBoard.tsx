@@ -21,19 +21,16 @@ const DrawingBoard = () => {
 
   const themeColors = {
     light: {
-      background: "#FFFFFF",
       stroke: "#000000",
       eraser: "#FFFFFF"
     },
     dark: {
-      background: "#000000",
       stroke: "#FFFFFF",
       eraser: "#000000"
     },
     chalkboard: {
-      background: "#064e3b", 
       stroke: "#E8EEF0",
-      eraser: "#064e3b"
+      eraser: "#000000"
     }
   };
 
