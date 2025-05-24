@@ -46,7 +46,9 @@ const DrawingBoard = () => {
 
   const getActiveTool = () => (activeItem === 1 ? "eraser" : "pen");
 
-  const handleStart = () => {
+  const handleStart = (e: any) => {
+    e.evt.preventDefault();
+
     isDrawing.current = true;
     const stage = stageRef.current;
     const point = stage.getPointerPosition();
@@ -62,7 +64,9 @@ const DrawingBoard = () => {
     ]);
   };
 
-  const handleMove = () => {
+  const handleMove = (e: any) => {
+    e.evt.preventDefault();
+
     if (!isDrawing.current) return;
 
     const stage = stageRef.current;
@@ -72,7 +76,9 @@ const DrawingBoard = () => {
     setLines(lines.slice(0, -1).concat(lastLine));
   };
 
-  const handleEnd = () => {
+  const handleEnd = (e: any) => {
+    e.evt.preventDefault();
+
     isDrawing.current = false;
   };
 
