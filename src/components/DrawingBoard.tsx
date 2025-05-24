@@ -1,12 +1,6 @@
-import { Eraser, PencilLine } from "lucide-react";
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState } from "react";
 import { Layer, Line, Stage } from "react-konva";
-
-interface MenuItemProps {
-  icon: ReactNode;
-  isActive?: boolean;
-  onClick?: () => void;
-}
+import { useDrawingStore } from "../store/ActiveTool.store";
 
 interface LineProps {
   points: number[];
@@ -17,34 +11,11 @@ interface LineProps {
   dash?: number[];
 }
 
-const MenuItem = ({ icon, isActive = false, onClick }: MenuItemProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center justify-center w-10 h-10 rounded-2xl transition-colors cursor-pointer 
-        ${
-          isActive
-            ? "bg-purple-100 text-purple-700"
-            : "text-gray-700 hover:bg-gray-100"
-        }`}
-    >
-      {icon}
-    </button>
-  );
-};
-
 const DrawingBoard = () => {
   const [lines, setLines] = useState<LineProps[]>([]);
-  const [activeItem, setActiveItem] = useState(0);
+  const { activeTool } = useDrawingStore();
   const isDrawing = useRef(false);
   const stageRef = useRef<any>(null);
-
-  const menuItems = [
-    { icon: <PencilLine size={18} />, id: 0, tool: "pen" },
-    { icon: <Eraser size={18} />, id: 1, tool: "eraser" },
-  ];
-
-  const getActiveTool = () => (activeItem === 1 ? "eraser" : "pen");
 
   const handleStart = (e: any) => {
     e.evt.preventDefault();
@@ -56,10 +27,10 @@ const DrawingBoard = () => {
       ...lines,
       {
         points: [point.x, point.y],
-        stroke: getActiveTool() === "eraser" ? "#fff" : "#E8EEF0",
-        strokeWidth: getActiveTool() === "eraser" ? 32 : 8,
-        opacity: getActiveTool() === "eraser" ? 1 : 0.95,
-        tool: getActiveTool(),
+        stroke: activeTool === "eraser" ? "#fff" : "#E8EEF0",
+        strokeWidth: activeTool === "eraser" ? 32 : 8,
+        opacity: activeTool === "eraser" ? 1 : 0.95,
+        tool: activeTool,
       },
     ]);
   };
@@ -84,18 +55,6 @@ const DrawingBoard = () => {
 
   return (
     <>
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex items-center gap-2 p-2 bg-white rounded-2xl shadow-md">
-          {menuItems.map((item) => (
-            <MenuItem
-              key={item.id}
-              icon={item.icon}
-              isActive={activeItem === item.id}
-              onClick={() => setActiveItem(item.id)}
-            />
-          ))}
-        </div>
-      </div>
       <Stage
         ref={stageRef}
         width={window.innerWidth}
