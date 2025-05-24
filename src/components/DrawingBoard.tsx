@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Layer, Line, Stage } from "react-konva";
 import { useDrawingStore } from "../store/ActiveTool.store";
 
@@ -16,6 +16,24 @@ const DrawingBoard = () => {
   const { activeTool } = useDrawingStore();
   const isDrawing = useRef(false);
   const stageRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (isDrawing.current) {
+        isDrawing.current = false;
+      }
+    };
+
+    // Añadir event listener al documento
+    document.addEventListener("mouseup", handleGlobalMouseUp);
+    document.addEventListener("mouseleave", handleGlobalMouseUp);
+    
+    // Limpiar event listeners al desmontar
+    return () => {
+      document.removeEventListener("mouseup", handleGlobalMouseUp);
+      document.removeEventListener("mouseleave", handleGlobalMouseUp);
+    };
+  }, []);
 
   const handleStart = (e: any) => {
     e.evt.preventDefault();
