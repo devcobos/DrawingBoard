@@ -1,8 +1,8 @@
 import { Eraser, PencilLine } from "lucide-react";
 import { type ReactNode } from "react";
+import type { Tool } from "../store/ActiveTool.store";
 import { useDrawingStore } from "../store/ActiveTool.store";
 import { useThemeStore } from "../store/Theme.store";
-import type { Tool } from "../store/ActiveTool.store";
 
 interface MenuItemProps {
   icon: ReactNode;
@@ -11,24 +11,29 @@ interface MenuItemProps {
   theme: string;
 }
 
-const MenuItem = ({ icon, isActive = false, onClick, theme }: MenuItemProps) => {
+const MenuItem = ({
+  icon,
+  isActive = false,
+  onClick,
+  theme,
+}: MenuItemProps) => {
   // Estilos según el tema
   const themeStyles = {
     light: {
       active: "bg-purple-100 text-purple-700",
       inactive: "text-gray-700 hover:bg-gray-100",
-      bg: "bg-white"
+      bg: "bg-white",
     },
     dark: {
       active: "bg-purple-800 text-purple-200",
       inactive: "text-gray-300 hover:bg-gray-800",
-      bg: "bg-gray-900"
+      bg: "bg-gray-900",
     },
     chalkboard: {
       active: "bg-emerald-800 text-emerald-200",
       inactive: "text-gray-200 hover:bg-emerald-800",
-      bg: "bg-emerald-900"
-    }
+      bg: "bg-emerald-900",
+    },
   };
 
   const styles = themeStyles[theme as keyof typeof themeStyles];
@@ -57,12 +62,14 @@ const ToolBar = () => {
   const bgStyles = {
     light: "bg-white",
     dark: "bg-gray-900",
-    chalkboard: "bg-emerald-900"
+    chalkboard: "bg-emerald-900",
   };
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-      <div className={`flex items-center gap-2 p-2 ${bgStyles[currentTheme]} rounded-2xl shadow-md`}>
+    <div className="fixed top-4 left-4 z-50">
+      <div
+        className={`flex items-center gap-2 p-2 ${bgStyles[currentTheme]} rounded-2xl shadow-md`}
+      >
         {menuItems.map((item) => (
           <MenuItem
             key={item.id}
