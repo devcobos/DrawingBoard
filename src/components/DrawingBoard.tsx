@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Layer, Line, Stage } from "react-konva";
 import { useDrawingStore } from "../store/ActiveTool.store";
+import { useThemeStore } from "../store/Theme.store";
 
 interface LineProps {
   points: number[];
@@ -14,8 +15,37 @@ interface LineProps {
 const DrawingBoard = () => {
   const [lines, setLines] = useState<LineProps[]>([]);
   const { activeTool } = useDrawingStore();
+  const { currentTheme, setOnThemeChange } = useThemeStore();
   const isDrawing = useRef(false);
   const stageRef = useRef<any>(null);
+
+  const themeColors = {
+    light: {
+      background: "#FFFFFF",
+      stroke: "#000000",
+      eraser: "#FFFFFF"
+    },
+    dark: {
+      background: "#000000",
+      stroke: "#FFFFFF",
+      eraser: "#000000"
+    },
+    chalkboard: {
+      background: "#064e3b", 
+      stroke: "#E8EEF0",
+      eraser: "#064e3b"
+    }
+  };
+
+  useEffect(() => {
+    setOnThemeChange(() => {
+      setLines([]);
+    });
+
+    return () => {
+      setOnThemeChange(null);
+    };
+  }, [setOnThemeChange]);
 
   useEffect(() => {
     const handleGlobalMouseUp = () => {
@@ -45,9 +75,9 @@ const DrawingBoard = () => {
       ...lines,
       {
         points: [point.x, point.y],
-        stroke: activeTool === "eraser" ? "#fff" : "#E8EEF0",
+        stroke: activeTool === "eraser" ? themeColors[currentTheme].eraser : themeColors[currentTheme].stroke,
         strokeWidth: activeTool === "eraser" ? 32 : 8,
-        opacity: activeTool === "eraser" ? 1 : 0.95,
+        opacity: 1,
         tool: activeTool,
       },
     ]);
@@ -83,7 +113,7 @@ const DrawingBoard = () => {
         onTouchMove={handleMove}
         onMouseUp={handleEnd}
         onTouchEnd={handleEnd}
-        className="full h-screen bg-emerald-950"
+        className="full h-screen"
       >
         <Layer>
           {lines.map((line, i) => (
