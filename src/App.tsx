@@ -8,7 +8,7 @@ function App() {
 
   // Clases para cada tema
   const themeClasses = {
-    light: 'bg-white text-black',
+    light: 'bg-gray-200 text-black',
     dark: 'bg-gray-950 text-white',
     chalkboard: 'bg-emerald-950 text-white'
   };
